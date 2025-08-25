@@ -3,6 +3,8 @@ import "wxt/browser";
 
 declare module "wxt/browser" {
   export type PublicPath =
+    | ""
+    | "/"
     | "/_locales/en/messages.json"
     | "/_locales/zh_CN/messages.json"
     | "/background.js"
@@ -19,7 +21,7 @@ declare module "wxt/browser" {
     | "/wxt.svg"
     | "/zsm.jpg"
   type HtmlPublicPath = Extract<PublicPath, `${string}.html`>
-  export interface WxtRuntime extends Runtime.Static {
+  export interface WxtRuntime {
     getURL(path: PublicPath): string;
     getURL(path: `${HtmlPublicPath}${string}`): string;
   }
