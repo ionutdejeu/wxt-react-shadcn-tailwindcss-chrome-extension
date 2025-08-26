@@ -4,7 +4,7 @@ declare global {
   const ContentScriptContext: typeof import('wxt/utils/content-script-context')['ContentScriptContext']
   const InvalidMatchPattern: typeof import('wxt/utils/match-patterns')['InvalidMatchPattern']
   const MatchPattern: typeof import('wxt/utils/match-patterns')['MatchPattern']
-  const ThemeProvider: typeof import('/home/ionutdejeu/projects/react/wxt-react-shadcn-tailwindcss-chrome-extension/components/theme-provider')['ThemeProvider']
+  const ThemeProvider: typeof import('C:/Users/ionut/Projects/react/wxt-react-shadcn-tailwindcss-chrome-extension/components/theme-provider')['ThemeProvider']
   const browser: typeof import('wxt/browser')['browser']
   const createIframeUi: typeof import('wxt/utils/content-script-ui/iframe')['createIframeUi']
   const createIntegratedUi: typeof import('wxt/utils/content-script-ui/integrated')['createIntegratedUi']
@@ -15,12 +15,12 @@ declare global {
   const defineUnlistedScript: typeof import('wxt/utils/define-unlisted-script')['defineUnlistedScript']
   const defineWxtPlugin: typeof import('wxt/utils/define-wxt-plugin')['defineWxtPlugin']
   const fakeBrowser: typeof import('wxt/testing')['fakeBrowser']
-  const i18n: typeof import('/home/ionutdejeu/projects/react/wxt-react-shadcn-tailwindcss-chrome-extension/components/i18n')['default']
-  const i18nConfig: typeof import('/home/ionutdejeu/projects/react/wxt-react-shadcn-tailwindcss-chrome-extension/components/i18nConfig')['default']
+  const i18n: typeof import('C:/Users/ionut/Projects/react/wxt-react-shadcn-tailwindcss-chrome-extension/components/i18n')['default']
+  const i18nConfig: typeof import('C:/Users/ionut/Projects/react/wxt-react-shadcn-tailwindcss-chrome-extension/components/i18nConfig')['default']
   const injectScript: typeof import('wxt/utils/inject-script')['injectScript']
   const storage: typeof import('wxt/utils/storage')['storage']
   const useAppConfig: typeof import('wxt/utils/app-config')['useAppConfig']
-  const useTheme: typeof import('/home/ionutdejeu/projects/react/wxt-react-shadcn-tailwindcss-chrome-extension/components/theme-provider')['useTheme']
+  const useTheme: typeof import('C:/Users/ionut/Projects/react/wxt-react-shadcn-tailwindcss-chrome-extension/components/theme-provider')['useTheme']
 }
 // for type re-export
 declare global {
