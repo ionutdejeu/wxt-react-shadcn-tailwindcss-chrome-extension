@@ -34,5 +34,84 @@ export default defineBackground(() => {
         }
     });
 
+    // Background service worker for the Squash extension
+    /// <reference types="@types/dom-chromium-ai" />
+
+    
+    const ALARM_NAME = "hourly-analysis";
+
+    // Note: Extension icon click now shows popup.html instead of opening side panel directly
+
+    // Side panel is now opened via popup.html, not on action click
+
+    // Listen for installation
+    chrome.runtime.onInstalled.addListener(async () => {
+        console.log("Squash extension installed");
+
+        
+    });
+
+    // Handle alarm events
+    chrome.alarms.onAlarm.addListener(async (alarm) => {
+        if (alarm.name === ALARM_NAME) {
+            console.log("[Analysis] Alarm triggered");
+            try {
+                
+            } catch (error) {
+                console.error("Failed to run analysis from alarm:", error);
+            }
+        }
+    });
+
+    // Check alarm status on startup
+    chrome.runtime.onStartup.addListener(async () => {
+        
+    });
+
+    // All message handling now done through tRPC
+
+    // Handle errors
+    self.addEventListener("error", (event) => {
+        console.error("Background script error:", event.error);
+    });
+
+    // ============================================
+    // tRPC Handler Setup
+    // ============================================
+
+    // Set up tRPC message handler for incoming requests from sidepanel and offscreen
+    const messageHandler = createTRPCMessageHandler(
+        backgroundRouter,
+        (sender) => ({
+            timestamp: Date.now(),
+            sender,
+        }),
+        (message) => {
+            // Only accept messages targeted to background
+            const msg = message as { target?: string };
+            return !msg.target || msg.target === "background";
+        },
+    );
+
+    // Combined message handler for tRPC and SDK messages
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        console.log("[Background] Received message:", message.type);
+
+        // First try SDK message handler
+        if (
+            message.type?.startsWith("SDK_") ||
+            message.type === "PERMISSION_RESPONSE"
+        ) {
+            console.log("[Background] Routing to SDK handler");
+            
+        }
+
+        // Otherwise use tRPC handler
+        return messageHandler(message, sender, sendResponse);
+    });
+
+    console.log("[Background] Message handlers initialized (tRPC + SDK)");
+
+     
 
 });
