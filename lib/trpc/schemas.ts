@@ -6,14 +6,14 @@ export interface TRPCContext {
 	sender?: chrome.runtime.MessageSender;
 }
 
-const FactSchema = z.object({
+export const factSchema = z.object({
   id: z.string(),
   text: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
 
-const MemoryActionSchema = z.object({
+export const MemoryActionSchema = z.object({
   type: z.enum(['ADD', 'UPDATE', 'DELETE', 'UNCHANGED']),
   id: z.string().optional(),
   text: z.string(),

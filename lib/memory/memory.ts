@@ -1,4 +1,4 @@
-import { offscreenToBackgroundClient } from "../trpc/client";
+import { offscreenToBackgroundClient } from "../trpc/clients";
 import type { AnalysisMemory } from "../types";
 import {
 	createChromeStorage,
@@ -41,22 +41,6 @@ export function createEmptyMemory(): AnalysisMemory {
 	};
 }
 
-/**
- * Load memory via service worker message passing (for offscreen documents)
- * SuperJSON automatically handles Date deserialization through tRPC
- */
-export async function loadMemoryFromServiceWorker(): Promise<AnalysisMemory | null> {
-	try {
-		const memory = await offscreenToBackgroundClient.memory.read.query();
-		if (!memory) return null;
-
-		// SuperJSON via tRPC automatically handles Date deserialization
-		return memory;
-	} catch (error) {
-		console.error("[Memory] Failed to load via service worker:", error);
-		return null;
-	}
-}
 
 /**
  * Load memory from Chrome storage using SuperJSON
@@ -101,20 +85,7 @@ export async function loadMemoryFromStorage(): Promise<AnalysisMemory | null> {
 		},
 	);
 }
-
-/**
- * Save memory via service worker message passing (for offscreen documents)
- */
-export async function saveMemoryToServiceWorker(
-	memory: AnalysisMemory,
-): Promise<void> {
-	try {
-		await offscreenToBackgroundClient.memory.write.mutate({ memory });
-	} catch (error) {
-		console.error("[Memory] Failed to save via service worker:", error);
-	}
-}
-
+ 
 /**
  * Save memory to Chrome storage using SuperJSON
  */

@@ -1,5 +1,7 @@
 import {browser} from "wxt/browser";
 import ExtMessage, {MessageFrom, MessageType} from "@/entrypoints/types.ts";
+import { backgroundRouter } from "@/lib/trpc/background-router";
+import { createTRPCMessageHandler } from "@/lib/trpc/transport";
 
 export default defineBackground(() => {
     console.log('Hello background!', {id: browser.runtime.id});// background.js
