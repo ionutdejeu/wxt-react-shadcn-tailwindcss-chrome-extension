@@ -11,8 +11,7 @@ import type {
 	FullAnalysisResult,
 	MemorySettings,
 } from "../types";
-import type { AIProviderConfig } from "./ai-interface";
-import type { AutoAnalysisSettings } from "./ambient";
+import type { AIProviderConfig } from "../ai/ai-interface";
 
 // Storage keys
 export const MEMORY_KEY = "history_analysis_memory";
@@ -26,7 +25,6 @@ interface StorageSchema {
 	[MEMORY_KEY]: AnalysisMemory;
 	[MEMORY_SETTINGS_KEY]: MemorySettings;
 	[AI_CONFIG_KEY]: AIProviderConfig;
-	[AUTO_ANALYSIS_SETTINGS_KEY]: AutoAnalysisSettings;
 	[CUSTOM_PROMPTS_KEY]: CustomPrompts;
 	[LAST_ANALYSIS_RESULT_KEY]: FullAnalysisResult;
 }
@@ -35,7 +33,6 @@ export const storageKeys: (keyof StorageSchema)[] = [
 	MEMORY_KEY,
 	MEMORY_SETTINGS_KEY,
 	AI_CONFIG_KEY,
-	AUTO_ANALYSIS_SETTINGS_KEY,
 	CUSTOM_PROMPTS_KEY,
 	LAST_ANALYSIS_RESULT_KEY,
 ];

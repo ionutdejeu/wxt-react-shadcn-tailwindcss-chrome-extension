@@ -47,6 +47,12 @@ const Sidebar = (
                         </TooltipTrigger>
                         <TooltipContent side="right">home</TooltipContent>
                     </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            
+                        </TooltipTrigger>
+                        <TooltipContent side="right">Store Memory</TooltipContent>
+                    </Tooltip>
                 </TooltipProvider>
             </nav>
             <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-5">

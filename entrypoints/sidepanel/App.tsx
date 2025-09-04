@@ -1,16 +1,18 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './App.module.css';
 import '../../assets/main.css'
-import Sidebar, {SidebarType} from "@/entrypoints/sidebar.tsx";
-import {browser} from "wxt/browser";
-import ExtMessage, {MessageType} from "@/entrypoints/types.ts";
-import {Button} from "@/components/ui/button.tsx";
-import {Card} from "@/components/ui/card.tsx";
-import {Home} from "@/entrypoints/sidepanel/home.tsx";
-import {SettingsPage} from "@/entrypoints/sidepanel/settings.tsx";
-import {useTheme} from "@/components/theme-provider.tsx";
-import {useTranslation} from 'react-i18next';
+import Sidebar, { SidebarType } from "@/entrypoints/sidebar.tsx";
+import { browser } from "wxt/browser";
+import ExtMessage, { MessageType } from "@/entrypoints/types.ts";
+import { Button } from "@/components/ui/button.tsx";
+import { Card } from "@/components/ui/card.tsx";
+import { Home } from "@/entrypoints/sidepanel/home.tsx";
+import { SettingsPage } from "@/entrypoints/sidepanel/settings.tsx";
+import { useTheme } from "@/components/theme-provider.tsx";
+import { useTranslation } from 'react-i18next';
 import Header from "@/entrypoints/sidepanel/header.tsx";
+import { IoMdAddCircle } from "react-icons/io";
+import { sidepanelToBackgroundClient } from "@/lib/trpc/clients.ts";
 
 export default () => {
     const [showButton, setShowButton] = useState(false)
@@ -20,8 +22,8 @@ export default () => {
     const [buttonStyle, setButtonStyle] = useState<any>();
     const [cardStyle, setCardStyle] = useState<any>();
     const cardRef = useRef<HTMLDivElement>(null);
-    const {theme, toggleTheme} = useTheme();
-    const {t, i18n} = useTranslation();
+    const { theme, toggleTheme } = useTheme();
+    const { t, i18n } = useTranslation();
 
     async function initI18n() {
         let data = await browser.storage.local.get('i18n');
@@ -48,14 +50,37 @@ export default () => {
         <div className={theme}>
             {<div
                 className="fixed top-0 right-0 h-screen w-full bg-background z-[1000000000000] rounded-l-xl shadow-2xl">
-                <Header headTitle={headTitle}/>
+                <Header headTitle={headTitle} />
                 <Sidebar sideNav={(sidebarType: SidebarType) => {
                     setSidebarType(sidebarType);
                     setHeadTitle(sidebarType);
-                }}/>
+                }} />
                 <main className="mr-14 grid gap-4 p-4 md:gap-8 md:p-8">
-                    {sidebarType === SidebarType.home && <Home/>}
-                    {sidebarType === SidebarType.settings && <SettingsPage/>}
+                    {sidebarType === SidebarType.home && <Home />}
+                    {sidebarType === SidebarType.settings && <SettingsPage />}
+                    <a
+                        className={`hover:cursor-pointer flex h-9 w-9 items-center justify-center text-muted-foreground transition-colors`}
+                        href="#"
+                        onClick={async (e) => {
+                            e.preventDefault();
+                            try {
+                                const now = new Date();
+                                debugger;
+                                await sidepanelToBackgroundClient.memory.storeFact.mutate({
+                                    id: String(Date.now()),
+                                    text: "Stored from sidepanel",
+                                    createdAt: now,
+                                    updatedAt: now,
+                                });
+                                console.log("Memory stored successfully");
+                            } catch (err) {
+                                console.error("Failed to store memory", err);
+                            }
+                        }}
+                    >
+                        <IoMdAddCircle className="h-5 w-5" />
+                        <span className="sr-only">Store Memory</span>
+                    </a>
                 </main>
             </div>
             }
@@ -64,8 +89,8 @@ export default () => {
             }
             {
                 <Card ref={cardRef}
-                      className={`absolute z-[100000] w-[300px] h-[200px] ${showCard ? 'block' : 'hidden'}`}
-                      style={cardStyle}></Card>
+                    className={`absolute z-[100000] w-[300px] h-[200px] ${showCard ? 'block' : 'hidden'}`}
+                    style={cardStyle}></Card>
             }
         </div>
 
