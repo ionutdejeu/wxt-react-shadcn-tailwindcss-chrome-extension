@@ -9,8 +9,8 @@ export interface TRPCContext {
 export const factSchema = z.object({
   id: z.string(),
   text: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.string().or(z.date()),
+  updatedAt: z.string().or(z.date()),
 });
 
 export const MemoryActionSchema = z.object({

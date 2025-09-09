@@ -1,20 +1,25 @@
-import {browser} from "wxt/browser";
-import ExtMessage, {MessageFrom, MessageType} from "@/entrypoints/types.ts";
+import { browser } from "wxt/browser";
+import ExtMessage, { MessageFrom, MessageType } from "@/entrypoints/types.ts";
 import { backgroundRouter } from "@/lib/trpc/background-router";
 import { createTRPCMessageHandler } from "@/lib/trpc/transport";
+import { ensureOffscreenDocument } from "@/lib/utils/chrome-api";
+
+chrome.runtime.onStartup.addListener( () => {
+    console.log(`onStartup()`);
+});
 
 export default defineBackground(() => {
-    console.log('Hello background!', {id: browser.runtime.id});// background.js
+    console.log('Hello background!', { id: browser.runtime.id });// background.js
 
     // @ts-ignore
-    browser.sidePanel.setPanelBehavior({openPanelOnActionClick: true}).catch((error: any) => console.error(error));
+    browser.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch((error: any) => console.error(error));
 
     //monitor the event from extension icon click
     browser.action.onClicked.addListener((tab) => {
         // 发送消息给content-script.js
         console.log("click icon")
         console.log(tab)
-        browser.tabs.sendMessage(tab.id!, {messageType: MessageType.clickExtIcon});
+        browser.tabs.sendMessage(tab.id!, { messageType: MessageType.clickExtIcon });
     });
 
     // background.js
@@ -25,7 +30,7 @@ export default defineBackground(() => {
             console.log(message)
             return true;
         } else if (message.messageType === MessageType.changeTheme || message.messageType === MessageType.changeLocale) {
-            let tabs = await browser.tabs.query({active: true, currentWindow: true});
+            let tabs = await browser.tabs.query({ active: true, currentWindow: true });
             console.log(`tabs:${tabs.length}`)
             if (tabs) {
                 for (const tab of tabs) {
@@ -39,7 +44,7 @@ export default defineBackground(() => {
     // Background service worker for the Squash extension
     /// <reference types="@types/dom-chromium-ai" />
 
-    
+
     const ALARM_NAME = "hourly-analysis";
 
     // Note: Extension icon click now shows popup.html instead of opening side panel directly
@@ -50,7 +55,7 @@ export default defineBackground(() => {
     chrome.runtime.onInstalled.addListener(async () => {
         console.log("Squash extension installed");
 
-        
+
     });
 
     // Handle alarm events
@@ -58,7 +63,7 @@ export default defineBackground(() => {
         if (alarm.name === ALARM_NAME) {
             console.log("[Analysis] Alarm triggered");
             try {
-                
+
             } catch (error) {
                 console.error("Failed to run analysis from alarm:", error);
             }
@@ -67,7 +72,7 @@ export default defineBackground(() => {
 
     // Check alarm status on startup
     chrome.runtime.onStartup.addListener(async () => {
-        
+
     });
 
     // All message handling now done through tRPC
@@ -105,7 +110,7 @@ export default defineBackground(() => {
             message.type === "PERMISSION_RESPONSE"
         ) {
             console.log("[Background] Routing to SDK handler");
-            
+
         }
 
         // Otherwise use tRPC handler
@@ -114,6 +119,14 @@ export default defineBackground(() => {
 
     console.log("[Background] Message handlers initialized (tRPC + SDK)");
 
-     
+
+
+    // Initialize offscreen document immediately on service worker start
+    // This ensures it's available for all operations
+    ensureOffscreenDocument().match(
+        () => console.log("[Background] Offscreen document ready"),
+        (error) =>
+            console.error("[Background] Failed to create offscreen document:", error),
+    );
 
 });

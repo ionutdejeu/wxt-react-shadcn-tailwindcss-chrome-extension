@@ -14,6 +14,7 @@ declare module "wxt/browser" {
     | "/icon/32.png"
     | "/icon/48.png"
     | "/icon/96.png"
+    | "/offscreen.html"
     | "/popup-bak.html"
     | "/sidebar.js"
     | "/sidepanel.html"
